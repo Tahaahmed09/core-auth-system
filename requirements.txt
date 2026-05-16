@@ -1,0 +1,21 @@
+fastapi[standard]
+uvicorn[standard]
+annotated-doc
+
+pydantic
+python-dotenv
+python-multipart
+email-validator
+
+# Authentication
+python-jose[cryptography]
+passlib[bcrypt]
+bcrypt
+
+# Database
+sqlalchemy[asyncio]>=2.0.0
+asyncpg
+
+# Optional but useful
+httpx
+redis>=5.0.0
