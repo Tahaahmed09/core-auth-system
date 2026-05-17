@@ -8,7 +8,7 @@ python-multipart
 # Authentication
 python-jose[cryptography]
 passlib[bcrypt]
-bcrypt
+bcrypt==4.0.1
 
 # Database
 sqlalchemy[asyncio]>=2.0.0
