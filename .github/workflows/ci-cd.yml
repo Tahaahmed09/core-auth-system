@@ -2,9 +2,9 @@ name: CI/CD Pipeline - Core Auth
 
 on:
   push:
-    branches: [ main, master ]
+    branches: [main, master]
   pull_request:
-    branches: [ main, master ]
+    branches: [main, master]
 
 jobs:
   test:
@@ -36,30 +36,34 @@ jobs:
           --health-retries 5
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-      - name: Setup Python
+      - name: Setup Python 3.11
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: "3.11"
 
       - name: Install UV
-        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh && echo "$HOME/.cargo/bin" >> $GITHUB_PATH
 
-      - name: Install Dependencies
-        run: uv pip install -r requirements.txt
+      - name: Install dependencies
+        run: uv pip install --system -r requirements.txt
 
+      # ── Stage 1: Linter ──────────────────────────────────────────────────
       - name: Run Linter (Ruff)
-        run: |
-          uv pip install ruff
-          ruff check .
+        run: ruff check .
 
+      # ── Stage 2: Static Security Audit (SAST) ───────────────────────────
+      - name: Run Security Scan (Bandit)
+        run: bandit -r app/ -ll
+
+      # ── Stage 3: Async Test Suite ────────────────────────────────────────
       - name: Run Tests
         env:
           PG_USER: postgres
           PG_PASS: postgres
           PG_HOST: localhost
           PG_NAME: auth_db
-        run: |
-          # Agar tests banaaye ho to yahan chalao
-          echo "✅ Tests passed (Add proper tests later)"
+          REDIS_URL: redis://localhost:6379/0
+        run: pytest tests/ -v --tb=short

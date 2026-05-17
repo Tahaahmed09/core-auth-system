@@ -1,21 +1,28 @@
 fastapi[standard]
 uvicorn[standard]
-annotated-doc
 
-pydantic
+pydantic[email]
 python-dotenv
 python-multipart
-email-validator
 
 # Authentication
 python-jose[cryptography]
 passlib[bcrypt]
-bcrypt
+bcrypt==4.0.1
 
 # Database
 sqlalchemy[asyncio]>=2.0.0
 asyncpg
 
-# Optional but useful
-httpx
+# Redis
 redis>=5.0.0
+
+# Testing
+httpx
+pytest
+pytest-asyncio
+anyio
+
+# Linting & Security
+ruff
+bandit

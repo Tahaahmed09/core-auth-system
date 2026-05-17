@@ -1,9 +1,11 @@
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 
+
 class UserCreate(BaseModel):
     email: EmailStr
     password: str
+
 
 class UserRegistrationResponse(BaseModel):
     id: int
@@ -12,8 +14,7 @@ class UserRegistrationResponse(BaseModel):
     is_superuser: bool
     created_at: datetime
 
-    class Config:
-        from_attributes = True
+    model_config = {"from_attributes": True}
 
 
 class TokenExchangeResponse(BaseModel):
